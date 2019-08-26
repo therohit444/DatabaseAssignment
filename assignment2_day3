@@ -1,0 +1,285 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adeventureworks    |
+| adventure          |
+| datatypes          |
+| db1                |
+| dbname             |
+| dipak              |
+| gg                 |
+| jd                 |
+| mydb               |
+| mysql              |
+| mysqlassgn         |
+| performance_schema |
+| test               |
+| test2              |
+| vita               |
++--------------------+
+16 rows in set (1.56 sec)
+
+mysql> use vita;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_vita |
++----------------+
+| textdatatype   |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from textdatatype;
+Empty set (0.26 sec)
+
+mysql> describe textdatatype;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| A     | char(10)    | YES  |     | NULL    |       |
+| B     | varchar(10) | YES  |     | NULL    |       |
+| C     | text        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into textdatatype values('123','123','text data larger accepted here'),('44','44','text data larger accepted here');
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from textdatatype;
++------+------+--------------------------------+
+| A    | B    | C                              |
++------+------+--------------------------------+
+| 123  | 123  | text data larger accepted here |
+| 44   | 44   | text data larger accepted here |
++------+------+--------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select length(A). length(B) from textdatatype;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '. length(B) from textdatatype' at line 1
+mysql> select length(A), length(B) from textdatatype;
++-----------+-----------+
+| length(A) | length(B) |
++-----------+-----------+
+|         3 |         3 |
+|         2 |         2 |
++-----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> create table numdatatypes
+    -> (
+    -> a tinyint,
+    -> b smallint,
+    -> c medumint,
+    -> d int,
+    -> e bigint,
+    -> decimal(8,2),
+    -> double(8,2),
+    -> f decimal(8,2),
+    -> g double(8,2),
+    -> h float
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'medumint,
+d int,
+e bigint,
+decimal(8,2),
+double(8,2),
+f decimal(8,2),
+g double(8' at line 5
+mysql> create table numdatatypes
+    -> (
+    -> a tinyint,
+    -> b smallint,
+    -> c medumint,
+    -> d int,
+    -> e bigint,
+    -> f decimal(8,2),
+    -> g double(8,2),
+    -> h float
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'medumint,
+d int,
+e bigint,
+f decimal(8,2),
+g double(8,2),
+h float
+)' at line 5
+mysql> create table numdatatypes
+    -> (
+    -> a tinyint,
+    -> b smallint,
+    -> c mediumint,
+    -> d int,
+    -> e bigint,
+    -> f decimal,
+    -> g decimal(8,2),
+    -> h float
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into numdatatypes values(110,234,3345,33345,999999.9,999999.99);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into numdatatypes values(12,130,3345,33345,33333456,999999.99,999999.99,999999.99);
+Query OK, 1 row affected, 1 warning (0.05 sec)
+
+mysql> insert into numdatatypes values(110,234,3345,33345,33333345,999999.9,999999.99,999999.99);
+Query OK, 1 row affected, 1 warning (0.05 sec)
+
+mysql> create table datedatatypes(
+    -> (
+    ->    A date,
+    ->    B datetime,
+    ->   C timestamp,
+    ->   D time
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+   A date,
+   B datetime,
+  C timestamp,
+  D time
+)' at line 2
+mysql> create table datedatatypes(
+    ->    A date,
+    ->    B datetime,
+    ->   C timestamp,
+    ->   D time
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into datedatatypes values(current_date(),now(),now() ,now());
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from datedatatypes;
++------------+---------------------+---------------------+----------+
+| A          | B                   | C                   | D        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:52:09 | 2019-08-26 19:52:09 | 19:52:09 |
++------------+---------------------+---------------------+----------+
+1 row in set (0.01 sec)
+
+mysql> select * from numdatatypes;
++------+------+------+-------+----------+---------+-----------+---------+
+| a    | b    | c    | d     | e        | f       | g         | h       |
++------+------+------+-------+----------+---------+-----------+---------+
+|   12 |  130 | 3345 | 33345 | 33333456 | 1000000 | 999999.99 | 1000000 |
+|  110 |  234 | 3345 | 33345 | 33333345 | 1000000 | 999999.99 | 1000000 |
++------+------+------+-------+----------+---------+-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> insert into datedatatypes values
+    -> (
+    -> '2019-08-26','2019-08-26 10:30:23','20190826103023','10:30:23'
+    -> );
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from datedatatypes;
++------------+---------------------+---------------------+----------+
+| A          | B                   | C                   | D        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:52:09 | 2019-08-26 19:52:09 | 19:52:09 |
+| 2019-08-26 | 2019-08-26 10:30:23 | 2019-08-26 10:30:23 | 10:30:23 |
++------------+---------------------+---------------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> create table spldatatypes
+    -> (
+    -> ID int AUTO_INCREMENT
+    -> primary key,
+    -> Membership ENUM('silver','gold','platinum'),hobbies SET('swimming','sking','cricket','football')
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from spldatatypes;
+Empty set (0.00 sec)
+
+mysql> insert into spldatatypes
+    -> ( membership, hobbies)
+    -> values
+    -> ('silver','bowling');
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> select * from datedatatypes;
++------------+---------------------+---------------------+----------+
+| A          | B                   | C                   | D        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:52:09 | 2019-08-26 19:52:09 | 19:52:09 |
+| 2019-08-26 | 2019-08-26 10:30:23 | 2019-08-26 10:30:23 | 10:30:23 |
++------------+---------------------+---------------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> create table spldatatypes
+    -> (
+    -> ID int AUTO_INCREMENT
+    -> primary key,
+    -> Membership ENUM('silver','gold','platinum'),hobbies SET('swimming','sking','cricket','football')
+    -> );
+ERROR 1050 (42S01): Table 'spldatatypes' already exists
+mysql> insert into spldatatypes
+    -> (membership,hobbies)
+    -> values
+    -> ('silver','bowling');
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> show table spldatatypes;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'spldatatypes' at line 1
+mysql> describe spldatatypes;
++------------+----------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                         | Null | Key | Default | Extra          |
++------------+----------------------------------------------+------+-----+---------+----------------+
+| ID         | int(11)                                      | NO   | PRI | NULL    | auto_increment |
+| Membership | enum('silver','gold','platinum')             | YES  |     | NULL    |                |
+| hobbies    | set('swimming','sking','cricket','football') | YES  |     | NULL    |                |
++------------+----------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into spldatatypes
+    -> (membership,hobbies)
+    -> values
+    -> ('silver','bowling');
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> select * from spldatatypes;
+Empty set (0.00 sec)
+
+mysql> insert into spldatatypes
+    -> (membership,hobbies)
+    -> values
+    -> ('silver','swimming');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from spldatatypes;
++----+------------+----------+
+| ID | Membership | hobbies  |
++----+------------+----------+
+|  1 | silver     | swimming |
++----+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> insert into spldatatypes
+    -> (membership,hobbies)
+    -> values
+    -> ('gold','cricket');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from spldatatypes;
++----+------------+----------+
+| ID | Membership | hobbies  |
++----+------------+----------+
+|  1 | silver     | swimming |
+|  2 | gold       | cricket  |
++----+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> 
